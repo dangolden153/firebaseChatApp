@@ -1,0 +1,103 @@
+export const chatData = [
+  {
+    id: "1233",
+    image: `${require("../images/pics7.jpg")}`,
+    userName: "Deep",
+    userChat: "where are you? waitin...",
+    date: "7:20 AM",
+    notifications: "",
+  },
+  {
+    id: "123",
+    image: `${require("../images/pics3.jpg")}`,
+    userName: "Park",
+    userChat: "where are you? waitin...",
+    date: "7:30 AM",
+    notifications: "1",
+  },
+
+  {
+    id: "1235d",
+    image: `${require("../images/pics2.jpg")}`,
+    userName: "Park",
+    userChat: "see you in CP!",
+    date: "3 days",
+    notifications: "4",
+  },
+
+  {
+    id: "123sdc ",
+    image: `${require("../images/pics4.jpg")}`,
+    userName: "Arpit Khurana",
+    userChat: "see you shortly!",
+    date: "3 days",
+    notifications: "",
+  },
+
+  {
+    id: "1254wd3",
+    image: `${require("../images/pics5.jpg")}`,
+    userName: "Park",
+    userChat: "Mayank: Hey Everyo...",
+    date: "7:30 AM",
+    notifications: "",
+  },
+
+  {
+    id: "1234tfsv3",
+    image: `${require("../images/pics6.jpg")}`,
+    userName: "Park Hannah",
+    userChat: "where are you? waitin...",
+    date: "7:30 AM",
+    notifications: "1",
+  },
+
+  {
+    id: "123sf4tfsv3",
+    image: `${require("../images/pics7.jpg")}`,
+    userName: "Park Hannah",
+    userChat: "where are you? waitin...",
+    date: "7:30 AM",
+    notifications: "1",
+  },
+  {
+    id: "123ewrsg5d",
+    image: `${require("../images/pics2.jpg")}`,
+    userName: "Park",
+    userChat: "see you in CP!",
+    date: "3 days",
+    notifications: "4",
+  },
+  {
+    id: "1234eftffsv3",
+    image: `${require("../images/pics.jpg")}`,
+    userName: "Park Hannah",
+    userChat: "where are you? waitin...",
+    date: "7:30 AM",
+    notifications: "1",
+  },
+  {
+    id: "1234easdccftffsv3",
+    image: `${require("../images/pics.jpg")}`,
+    userName: "Park Hannah",
+    userChat: "where are you? waitin...",
+    date: "7:30 AM",
+    notifications: "1",
+  },
+  {
+    id: "1234esgfsevftffsv3",
+    image: `${require("../images/pics.jpg")}`,
+    userName: "Park Hannah",
+    userChat: "where are you? waitin...",
+    date: "7:30 AM",
+    notifications: "1",
+  },
+  {
+    id: "123esfazd",
+    image: `${require("../images/pics3.jpg")}`,
+    userName: "Park",
+    userChat: "where are you? waitin...",
+    date: "7:30 AM",
+    notifications: "1",
+  },
+];

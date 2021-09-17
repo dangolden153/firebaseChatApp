@@ -1,0 +1,51 @@
+.s {
+  /* orange */
+  color: #f64b29;
+
+  /* grey */
+  color: #c4c4c4;
+
+  /* header text color */
+  color: #ffff;
+
+  /* 40% transparent white*/
+  color: rgba(255, 255, 255, 0.452);
+
+  /* 10% transparent white*/
+  color: rgba(255, 255, 255, 0.11);
+
+  /* text grey color */
+  color: #e5e5e5;
+
+  /* sub-text grey color */
+  color: #dddddd;
+
+  /* background black */
+  color: #1a1a21;
+
+  /* sub-text grey color */
+  color: #3f3f3fb0;
+
+  /* star color */
+  color: #f7b02e;
+
+  /* duration-text-c */
+  color: #000000;
+
+  /* text-title */
+  color: #005cee;
+
+  /* light-text-title */
+  color: #3f7fe6f3;
+  /* sub-text-c */
+  color: #bec0db;
+
+  /* bg-color */
+  color: #059669;
+
+  /* bg-color */
+  color: #eb5545;
+
+  /* bg-color */
+  color: #404040;
+}
