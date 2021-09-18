@@ -14,9 +14,11 @@ import pics from "../images/user.jpg";
 import { StatusBar } from "expo-status-bar";
 import tw from "tailwind-react-native-classnames";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useSelector } from "react-redux";
 
 const ChatListUpNav = ({ navigation, usersData }) => {
-  //
+  const { usersDetails } = useSelector((state) => state);
+  console.log("user details ", usersDetails);
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
@@ -37,7 +39,7 @@ const ChatListUpNav = ({ navigation, usersData }) => {
 
         <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen")}>
           <Image
-            source={usersData?.photoURL !== null ? usersData?.photoURL : pics}
+            source={usersDetails?.img !== null ? usersDetails?.img : pics}
             style={{ height: 50, width: 50, borderRadius: 100 }}
           />
         </TouchableOpacity>

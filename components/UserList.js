@@ -14,11 +14,18 @@ import { StatusBar } from "expo-status-bar";
 import { db } from "../firebase";
 import UserItems from "./UserItems";
 import pics from "../images/user.jpg";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import momemt from "moment";
 
 const UserList = ({ navigation }) => {
   const [userData, setUserData] = useState([]);
+  const [data, setData] = useState(null);
   const { usersData } = useSelector((state) => state);
+  const dispatch = useDispatch();
+
+  const { usersDetails } = useSelector((state) => state);
+
+  // console.log("users details:", usersDetails);
 
   useEffect(() => {
     const getData = () => {
@@ -35,14 +42,30 @@ const UserList = ({ navigation }) => {
     };
 
     getData();
-  }, [setUserData]);
+  }, [userData]);
 
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      await db
+        .collection("users")
+        .doc(usersData?.uid)
+        .get()
+        .then((querySnapshot) => {
+          console.log("doc data", querySnapshot.data());
+          dispatch({ type: "userDetails", payload: querySnapshot.data() });
+        });
+    };
+
+    // return=()=>(
+
+    // )
+    getCurrentUser();
+  }, [usersData]);
+
+  // console.log("set user data:", userData);
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      {/* {userData.map(({ id, data }) => (
-        <UserItems id={id} key={id} data={data} navigation={navigation} />
-      ))} */}
 
       <FlatList
         data={userData}
@@ -50,32 +73,39 @@ const UserList = ({ navigation }) => {
         renderItem={({
           item: {
             id,
-            data: { image, userName, userChat, date, notifications, email },
+            data: { img, userName, userChat, status, notifications, email },
             data,
           },
         }) => (
           <ScrollView>
+            {/* if the current users email is equal to the email in the list of users email
+      render the rest without the current users email */}
             {usersData?.email === email ? null : (
               <TouchableOpacity
                 style={styles.usercontent}
                 onPress={() => navigation.navigate("ChatScreen", { id, data })}
               >
                 <Image
-                  source={
-                    usersData?.photoURL !== null ? usersData?.photoURL : pics
-                  }
+                  source={img !== null ? img : pics}
                   style={{ height: 80, width: 80, borderRadius: 10 }}
                 />
 
                 <View style={styles.name_chat}>
                   <Text numberOfLines={1} style={styles.username}>
-                    {usersData?.email === email ? null : email}
+                    {/* {usersDetails?.email !== null ? email : ""} */}
+                    {/* {console.log(img)}
+                    {console.log(email)} */}
+                    {email}
                   </Text>
                   {/* <Text style={styles.userchat}>....</Text> */}
                 </View>
 
                 <View style={styles.date_notf}>
-                  <Text style={styles.date}>7:30</Text>
+                  <Text style={styles.date}>
+                    {typeof data?.status == "string"
+                      ? data?.status
+                      : momemt(data?.status.toDate().toString()).fromNow()}
+                  </Text>
                   {/* <Text style={styles.notification}>2</Text> */}
                   {/* {notifications !== "" ? (
                   <Text style={styles.notification}>{notifications}</Text>

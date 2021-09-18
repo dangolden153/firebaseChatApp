@@ -18,11 +18,11 @@ import logo from "../images/Blord-logo.jpg";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/core";
 import { StatusBar } from "expo-status-bar";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 
 import FigerPrintModel from "../components/FigerPrintModel";
 
-const SignInFingerPrint = () => {
+const SignInScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -37,15 +37,25 @@ const SignInFingerPrint = () => {
     }
   };
 
+  const updateUser = async (userData) => {
+    await db;
+    db.collection("users")
+      .doc(userData.uid)
+      .update({
+        status: "online",
+      })
+      .then((res) => console.log("sucessful", res))
+      .catch((e) => console.log(e));
+  };
+
   const handleLogin = () => {
     setLoading(true);
     auth
       .signInWithEmailAndPassword(email, password)
       .then((response) => {
-        console.log(response);
+        updateUser(response.user);
         setState(true);
         setLoading(false);
-        // navigation.navigate("ChatList");
       })
       .catch((err) => {
         setError(err.message);
@@ -125,6 +135,7 @@ const SignInFingerPrint = () => {
             placeholderTextColor="gray"
             value={password}
             onChangeText={(text) => setPassword(text)}
+            secureTextEntry
           />
         </View>
         <TouchableOpacity
@@ -161,7 +172,7 @@ const SignInFingerPrint = () => {
   );
 };
 
-export default SignInFingerPrint;
+export default SignInScreen;
 
 const styles = StyleSheet.create({
   container: {

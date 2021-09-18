@@ -8,11 +8,26 @@ import {
   Ionicons,
   MaterialIcons,
 } from "@expo/vector-icons";
-import { auth } from "../firebase";
+import { auth, db, firebase } from "../firebase";
+import { useSelector } from "react-redux";
 
 const ProfileSettingList = () => {
+  const { usersData } = useSelector((state) => state);
+
+  const updateUser = async () => {
+    await db;
+    db.collection("users")
+      .doc(usersData.uid)
+      .update({
+        status: firebase.firestore.Timestamp.fromDate(new Date()),
+      });
+  };
+  // firebase.firestore.Timestamp.fromDate(new Date())
+  // firebase.firestore.FieldValue.serverTimestamp()
   const handleSignOut = () => {
-    auth.signOut();
+    auth.signOut().then((res) => {
+      updateUser();
+    });
     console.log("signed out!!");
   };
   return (

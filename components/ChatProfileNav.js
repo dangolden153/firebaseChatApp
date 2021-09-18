@@ -13,9 +13,15 @@ import { Ionicons, FontAwesome5, AntDesign } from "@expo/vector-icons";
 import pics from "../images/user.jpg";
 import { Icon } from "react-native-elements";
 import { useSelector } from "react-redux";
+import momemt from "moment";
 
 const ChatProfileNav = ({ navigation, data }) => {
   const { usersData } = useSelector((state) => state);
+
+  /////detructure the other user details and frt the neccessary information
+  // 2. this data should be useeffect so it can re-render anytime the other user changed a varaible
+  console.log("other user details:", data);
+
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity>
@@ -36,9 +42,11 @@ const ChatProfileNav = ({ navigation, data }) => {
         />
 
         <View>
-          <Text style={tw`text-white font-bold text-lg`}>Emman Charles</Text>
+          <Text style={tw`text-white font-bold text-lg`}>{data?.email}</Text>
           <Text style={[tw` text-sm`, { color: "#bec0db" }]}>
-            {data?.email}
+            {typeof data?.status == "string"
+              ? data?.status
+              : momemt(data?.status.toDate().toString()).fromNow()}
           </Text>
         </View>
       </TouchableOpacity>

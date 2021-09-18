@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Alert,
 } from "react-native";
 import { Button } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
@@ -15,7 +16,7 @@ import { Icon } from "react-native-elements";
 import { materialIcons, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/core";
 import { StatusBar } from "expo-status-bar";
-import { auth, db } from "../firebase";
+import { auth, db, firebase } from "../firebase";
 import logo from "../images/Blord-logo.jpg";
 
 const SignUpScreen = () => {
@@ -33,30 +34,44 @@ const SignUpScreen = () => {
       return;
     }
   };
-  const addUser = async () => {
-    await db
-      .collection("userss")
-      .add({
-        email: email,
-      })
+  const addUser = async (userData) => {
+    await db;
+    db.collection("users")
+      .doc(userData.uid)
+      .set(
+        {
+          email: userData?.email,
+          userName: "",
+          phoneNumber: number,
+          status: "online",
+          img: null,
+          resgisteredTime: firebase.firestore.FieldValue.serverTimestamp(),
+        },
+        { merge: true }
+      )
       .then((res) => console.log("sucessful", res))
       .catch((e) => console.log(e));
   };
 
+  const handleValidateError = () => {
+    if (number.length < 4) {
+      Alert.alert("please use a valid phone number! ") ||
+        alert("please use a valid phone number! ");
+      return;
+    }
+  };
   const handleSignUp = () => {
-    setLoading(true);
-    // if (number.length < 6) {
-    //   setError("please use a valid phone number! ");
-    //   return;
+    // if (handleValidateError()) {
+    //   return false;
     // }
+
+    setLoading(true);
     auth
       .createUserWithEmailAndPassword(email, password)
       .then((response) => {
-        console.log(response);
         setState(true);
         setLoading(false);
-        // addUser();
-        // navigation.navigate("ChatList");
+        addUser(response?.user);
       })
       .catch((err) => {
         setError(err.message);
@@ -79,7 +94,6 @@ const SignUpScreen = () => {
             backgroundColor: "#3f3f3fb0",
             top: 200,
             zIndex: 10,
-            // position:"relative"
           }}
         >
           <TouchableOpacity onPress={handleCancel}>
@@ -112,14 +126,6 @@ const SignUpScreen = () => {
           marginBottom: 20,
         }}
       />
-
-      {/* <View style={tw`-top-12 items-center`}>
-        <Image
-          source={pics}
-          style={{ width: 30, height: 30, resizeMode: "contain" }}
-        />
-        <Text style={tw`text-white py-4 text-lg`}> Sign with Google</Text>
-      </View> */}
 
       <View style={tw`-top-16 w-full items-center`}>
         {/* google */}
@@ -158,6 +164,7 @@ const SignUpScreen = () => {
             placeholderTextColor="gray"
             value={password}
             onChangeText={(text) => setPassword(text)}
+            secureTextEntry
           />
         </View>
         <TouchableOpacity
@@ -183,7 +190,7 @@ const SignUpScreen = () => {
           <Text style={tw` text-white text-lg`}>Already an acount ?</Text>
           <Text
             style={tw` text-gray-400 text-sm mx-2`}
-            onPress={() => navigation.navigate("SignInFingerPrint")}
+            onPress={() => navigation.navigate("SignInScreen")}
           >
             Login
           </Text>

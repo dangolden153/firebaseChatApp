@@ -128,51 +128,66 @@ const Chats = ({ otherUserId }) => {
         }) => (
           <View style={{ flex: 1 }}>
             <ScrollView>
-              {sender === usersData?.uid ? (
-                <View
+              {/* {sender === usersData?.uid ? ( */}
+              <View
+                style={[
+                  tw`flex-row items-center `,
+                  {
+                    flex: 1,
+                    alignSelf:
+                      sender === usersData?.uid ? "flex-end" : "flex-start",
+                  },
+                ]}
+              >
+                <Text
+                  style={{
+                    color: sender === usersData?.uid ? "#bec0db" : "black",
+                    margin: 20,
+                  }}
+                >
+                  {/* date {console.log("useres message", message)} */}
+                </Text>
+                <Text
+                  onPress={handleDelete}
                   style={[
-                    tw`flex-row items-center `,
-                    { alignSelf: "flex-end" },
+                    tw` text-white p-4  `,
+                    {
+                      backgroundColor:
+                        sender === usersData?.uid ? "#005CEE" : "#dddddd",
+                      // borderBottomLeftRadius: 10,
+                      // borderTopLeftRadius: 10,
+                      // borderBottomRightRadius: 10,
+                      borderRadius: 10,
+                      maxWidth: "70%",
+                      marginVertical: 10,
+                      color: sender === usersData?.uid ? "white" : "black",
+                    },
                   ]}
                 >
-                  <Text style={{ color: "#bec0db", margin: 20 }}>
-                    {/* date {console.log("useres message", message)} */}
-                  </Text>
+                  {message}
+                </Text>
+              </View>
+              {/* ) : ( */}
+              {/* <View style={tw`flex-row items-center `}>
                   <Text
                     onPress={handleDelete}
                     style={[
-                      tw` text-white p-4  `,
-                      {
-                        backgroundColor: "#005CEE",
-                        borderBottomLeftRadius: 10,
-                        borderTopLeftRadius: 10,
-                        borderBottomRightRadius: 10,
-                        maxWidth: "70%",
-                      },
-                    ]}
-                  >
-                    {message}
-                  </Text>
-                </View>
-              ) : (
-                <View style={tw`flex-row items-center `}>
-                  <Text
-                    onPress={handleDelete}
-                    style={[
-                      tw` text-white p-2 text-black  my-2 bg-gray-300`,
+                      tw` text-white p-2 text-black  bg-gray-300`,
                       {
                         borderBottomLeftRadius: 10,
                         borderTopRightRadius: 10,
                         borderBottomRightRadius: 10,
                         maxWidth: "70%",
+                        marginVertical:10
                       },
                     ]}
                   >
                     {message}
                   </Text>
                   <Text style={{ color: "#bec0db", margin: 20 }}>{date}</Text>
-                </View>
-              )}
+                </View>  */}
+
+              {/* )} */}
             </ScrollView>
           </View>
         )}

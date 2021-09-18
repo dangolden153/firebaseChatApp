@@ -23,7 +23,7 @@ import PassCodeScreen from "./Screens/PassCodeScreen";
 import EnterPassCode from "./Screens/EnterPassCode";
 import VideoCallScreen from "./Screens/VideoCallScreen";
 import ChatList from "./Screens/ChatList";
-import SignInFingerPrint from "./Screens/SignInFingerPrint";
+import SignInScreen from "./Screens/SignInScreen";
 import { auth, db } from "./firebase";
 import { Context } from "./context";
 import Chats from "./Screens/Chats";
@@ -60,23 +60,23 @@ export default function AppNavigator() {
     },
   });
 
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user !== null) {
-        db.collection("users").doc(user?.uid).set({
-          email: user?.email,
-        });
-        return;
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   auth.onAuthStateChanged((user) => {
+  //     if (user !== null) {
+  //       db.collection("users").doc(user?.uid).set({
+  //         email: user?.email,
+  //       });
+  //       return;
+  //     }
+  //   });
+  // }, []);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user !== null) {
         setIsloggedIn(true);
         dispatch({ type: "users_details", payload: user });
-        console.log("we are now authenticated", user?.email);
+        console.log("users_details", user);
       }
 
       ///do other thing
@@ -195,12 +195,12 @@ export default function AppNavigator() {
         ) : (
           <>
             <Stack.Screen
-              name="SignInFingerPrint"
+              name="SignInScreen"
               options={{
                 headerShown: false,
                 gestureDirection: "vertical",
               }}
-              component={SignInFingerPrint}
+              component={SignInScreen}
             />
 
             <Stack.Screen
@@ -216,3 +216,9 @@ export default function AppNavigator() {
     </NavigationContainer>
   );
 }
+
+// personal : forgot password functoinality
+
+//from the user data : userList Screen =>  img , email, last-message and time
+//// profile screen abilty to upload picture
+//// chat screen  => users picture, username/email  last seen
