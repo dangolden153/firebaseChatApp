@@ -103,8 +103,8 @@ const HorizontalUserList = ({ navigation }) => {
               <Image
                 source={image}
                 style={{
-                  height: 70,
-                  width: 70,
+                  height: 60,
+                  width: 60,
                   borderRadius: 10,
                   borderColor: "#005CEE",
                   borderWidth: 3,
@@ -136,8 +136,7 @@ const styles = StyleSheet.create({
 
   username: {
     color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 13,
     marginTop: 7,
     width: 60,
   },

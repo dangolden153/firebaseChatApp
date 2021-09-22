@@ -26,7 +26,6 @@ import ChatList from "./Screens/ChatList";
 import SignInScreen from "./Screens/SignInScreen";
 import { auth, db } from "./firebase";
 import { Context } from "./context";
-import Chats from "./Screens/Chats";
 
 const Stack = createStackNavigator();
 
@@ -186,11 +185,11 @@ export default function AppNavigator() {
               component={ProfileScreen}
             />
 
-            <Stack.Screen
+            {/* <Stack.Screen
               name="Chats"
               options={{ headerShown: false }}
               component={Chats}
-            />
+            /> */}
           </>
         ) : (
           <>
@@ -222,3 +221,11 @@ export default function AppNavigator() {
 //from the user data : userList Screen =>  img , email, last-message and time
 //// profile screen abilty to upload picture
 //// chat screen  => users picture, username/email  last seen
+
+// 1.  push users to firestore ,check if the profile picture updating is effective _/
+// 2. fix the remaning message styling _/
+// 3. forgot password functoinality
+
+// 5. last message beneath the username ....
+// 4. the time on the user name must be formated in LT am/pm
+// 6. work on the new messsage notifications functoinality

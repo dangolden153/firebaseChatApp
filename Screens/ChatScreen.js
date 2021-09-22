@@ -15,7 +15,7 @@ const ChatScreen = ({ route }) => {
     <SafeAreaView style={[tw`flex-1 p-4 pt-8`, { backgroundColor: "#000000" }]}>
       <StatusBar style="auto" />
       <ChatProfileNav navigation={navigation} data={data} />
-      <Chats otherUserId={id} />
+      <Chats otherUserId={id} data={data} />
     </SafeAreaView>
   );
 };

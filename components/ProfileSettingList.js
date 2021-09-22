@@ -27,6 +27,16 @@ const ProfileSettingList = () => {
   const handleSignOut = () => {
     auth.signOut().then((res) => {
       updateUser();
+      firebase
+        .database()
+        .ref("usersList/" + usersData?.uid)
+        .update({
+          time: firebase.firestore.Timestamp.now(),
+        })
+        .then((res) => {
+          console.log("time update to db", res);
+        })
+        .catch((e) => console.log(e));
     });
     console.log("signed out!!");
   };

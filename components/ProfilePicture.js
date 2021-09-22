@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, Button } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Button,
+  ActivityIndicator,
+} from "react-native";
 import tw from "tailwind-react-native-classnames";
 import pics from "../images/user.jpg";
 import { AntDesign, EvilIcons } from "@expo/vector-icons";
@@ -11,86 +18,15 @@ import { firebase, db } from "../firebase";
 require("firebase/firestore");
 require("firebase/firebase-storage");
 
-const ProfilePicture = () => {
-  const { usersData } = useSelector((state) => state);
-  const { usersDetails } = useSelector((state) => state);
+const ProfilePicture = ({ CurrentUserCred }) => {
+  const { usersData, usersDetails, CurrentUserCreds } = useSelector(
+    (state) => state
+  );
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
-
   const navigation = useNavigation();
-
-  const imageUpload = async () => {
-    const response = await fetch(image);
-    const blob = await response.blob();
-
-    const task = firebase
-      .storage()
-      .ref()
-      .child(`images/${new Date().toString()}`)
-      .put(blob);
-
-    const taskProgress = (snapshot) => {
-      console.log(`transferred: ${snapshot.bytesTransferred}`);
-
-      const taskComplete = () => {
-        task.snapshot.ref
-          .getDownloadURL()
-          .then((url) => {
-            console.log("uploading image url:", url);
-          })
-          .catch((e) => console.log(e));
-      };
-
-      const taskError = (snapshot) => {
-        console.log(snapshot);
-      };
-
-      task.on("stateChanged", taskProgress, taskError, taskComplete);
-    };
-  };
-
-  const updateUserImage = async () => {
-    const response = await fetch(image);
-    const blob = await response.blob();
-
-    const task = firebase
-      .storage()
-      .ref()
-      .child(`images/${new Date().toString()}`)
-      .put(blob);
-
-    task.on(
-      firebase.storage.TaskEvent.STATE_CHANGED,
-      () => {
-        setUploading(true);
-      },
-      (error) => {
-        alert("uploading", error);
-        blob.close;
-        setUploading(false);
-        return;
-      },
-      () => {
-        task.snapshot.ref
-          .getDownloadURL()
-          .then((url) => {
-            db.collection("users")
-              .doc(usersData.uid)
-              .update({
-                img: url,
-              })
-              .then((res) => console.log("image upload sucessful", res))
-              .catch((e) => console.log(e));
-            blob.close;
-            setUploading(false);
-            console.log("download url:", url);
-            return url;
-          })
-          .catch((e) => console.log(e));
-      }
-    );
-    // await db;
-  };
+  const pic =
+    "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg";
 
   const openImagePickerAsync = async () => {
     let permissionResult =
@@ -107,9 +43,120 @@ const ProfilePicture = () => {
         setImage(res.uri);
         // updateUserImage();
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.log("uploading went wrong:", e));
   };
 
+  //////second working method for uploading user picture to firebase storage and bd
+
+  // const imageUpload = async () => {
+  //   const response = await fetch(image);
+  //   const blob = await response.blob();
+
+  //   const task = firebase
+  //     .storage()
+  //     .ref()
+  //     .child(`images/${new Date().toString()}`)
+  //     .put(blob);
+
+  //   const taskProgress = (snapshot) => {
+  //     console.log(`transferred: ${snapshot.bytesTransferred}`);
+
+  //     const taskComplete = () => {
+  //       task.snapshot.ref
+  //         .getDownloadURL()
+  //         .then((url) => {
+  //           console.log("uploading image url:", url);
+  //         })
+  //         .catch((e) => console.log(e));
+  //     };
+
+  //     const taskError = (snapshot) => {
+  //       console.log(snapshot);
+  //     };
+
+  //     task.on("stateChanged", taskProgress, taskError, taskComplete);
+  //   };
+  // };
+
+  /////  updating profile from the firebase firestore
+
+  const updateUserImage = async () => {
+    if (image) {
+      const response = await fetch(image);
+      const blob = await response.blob();
+
+      const task = firebase
+        .storage()
+        .ref()
+        .child(`images/${new Date().toString()}`)
+        .put(blob);
+
+      task.on(
+        firebase.storage.TaskEvent.STATE_CHANGED,
+        () => {
+          setUploading(true);
+        },
+        (error) => {
+          alert("uploading", error);
+          blob.close;
+          setUploading(false);
+          return;
+        },
+        () => {
+          task.snapshot.ref
+            .getDownloadURL()
+            .then((url) => {
+              db.collection("users")
+                .doc(usersData?.uid)
+                .update({
+                  img: url,
+                })
+                .then((res) => {
+                  setImage(null);
+                  console.log("image upload sucessful", res);
+                })
+                .catch((e) => console.log(e));
+              blob.close;
+
+              setUploading(false);
+              setImage(null);
+              console.log("download url:", url);
+              return url;
+            })
+            .catch((e) => console.log(e));
+        }
+      );
+      return;
+    }
+  };
+
+  ////// updating profile from the firebase database
+
+  const UpdateUsersProfile = async () => {
+    if (image) {
+      setUploading(true);
+      try {
+        return firebase
+          .database()
+          .ref("usersList/" + usersData?.uid)
+          .update({
+            img: image,
+          })
+          .then((res) => {
+            setUploading(false);
+            setImage(null);
+            console.log("sucessful updated image to db", res);
+          })
+          .catch((e) => console.log(e));
+      } catch (e) {
+        setImage(null);
+        setUploading(false);
+        return console.log(e);
+      }
+    }
+  };
+
+  const img = CurrentUserCred?.img;
   return (
     <View style={tw`items-center py-5  `}>
       <View style={tw`flex-row items-center absolute top-5 left-2 `}>
@@ -119,9 +166,19 @@ const ProfilePicture = () => {
         <Text style={tw`text-xl text-white font-bold ml-3`}>Your Profile</Text>
       </View>
       {/*  */}
-      <View style={tw`relative mt-6`}>
+      <View style={tw` relative mt-6 `}>
+        {uploading && (
+          <ActivityIndicator
+            style={{ position: "absolute", top: 70, left: 70, zIndex: 50 }}
+            size="small"
+            color="#0000ff"
+          />
+        )}
+
         <Image
-          source={usersDetails?.img !== null ? usersDetails?.img : pics}
+          source={{
+            uri: img ? img : pic,
+          }}
           style={{
             height: 140,
             width: 140,
@@ -147,7 +204,7 @@ const ProfilePicture = () => {
       <Button
         style={{ marginTop: 5 }}
         title="upload"
-        onPress={updateUserImage}
+        onPress={UpdateUsersProfile}
       />
     </View>
   );

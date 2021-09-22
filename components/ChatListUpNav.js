@@ -15,10 +15,17 @@ import { StatusBar } from "expo-status-bar";
 import tw from "tailwind-react-native-classnames";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
+import momemt from "moment";
 
-const ChatListUpNav = ({ navigation, usersData }) => {
-  const { usersDetails } = useSelector((state) => state);
-  console.log("user details ", usersDetails);
+const ChatListUpNav = ({ navigation, CurrentUserCred }) => {
+  // const { img, id, status, email } = CurrentUserCred;
+  const img = CurrentUserCred?.img;
+  // const time = CurrentUserCred?.time;
+  // const Time = momemt(time).format("LT");
+  // console.log("time", typeof(Time));
+  const pic =
+    "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg";
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
@@ -39,7 +46,9 @@ const ChatListUpNav = ({ navigation, usersData }) => {
 
         <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen")}>
           <Image
-            source={usersDetails?.img !== null ? usersDetails?.img : pics}
+            // img ? img :
+            // source={img !== "" ? img : pics}
+            source={{ uri: img ? img : pic }}
             style={{ height: 50, width: 50, borderRadius: 100 }}
           />
         </TouchableOpacity>

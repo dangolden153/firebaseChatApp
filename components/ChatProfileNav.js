@@ -17,10 +17,12 @@ import momemt from "moment";
 
 const ChatProfileNav = ({ navigation, data }) => {
   const { usersData } = useSelector((state) => state);
-
+  const { id, img, email, status, time, userName } = data;
   /////detructure the other user details and frt the neccessary information
   // 2. this data should be useeffect so it can re-render anytime the other user changed a varaible
-  console.log("other user details:", data);
+  // console.log("other user details:", data);
+  const pic =
+    "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg";
 
   return (
     <SafeAreaView style={styles.container}>
@@ -37,16 +39,19 @@ const ChatProfileNav = ({ navigation, data }) => {
         onPress={() => navigation.navigate("ProfileScreen")}
       >
         <Image
-          source={usersData?.photoURL !== null ? usersData?.photoURL : pics}
-          style={{ height: 50, width: 50, borderRadius: 100 }}
+          source={{ uri: img ? img : pic }}
+          style={{ height: 40, width: 40, borderRadius: 100 }}
         />
 
-        <View>
-          <Text style={tw`text-white font-bold text-lg`}>{data?.email}</Text>
+        <View style={{ marginLeft: 10 }}>
+          <Text
+            numberOfLines={1}
+            style={{ width: "85%", fontSize: 16, color: "white" }}
+          >
+            {email}
+          </Text>
           <Text style={[tw` text-sm`, { color: "#bec0db" }]}>
-            {typeof data?.status == "string"
-              ? data?.status
-              : momemt(data?.status.toDate().toString()).fromNow()}
+            {momemt(time).format("LT")}
           </Text>
         </View>
       </TouchableOpacity>

@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Alert,
+  Platform,
 } from "react-native";
 import { Button } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
@@ -34,54 +35,77 @@ const SignUpScreen = () => {
       return;
     }
   };
-  const addUser = async (userData) => {
-    await db;
-    db.collection("users")
-      .doc(userData.uid)
-      .set(
-        {
-          email: userData?.email,
-          userName: "",
-          phoneNumber: number,
-          status: "online",
-          img: null,
-          resgisteredTime: firebase.firestore.FieldValue.serverTimestamp(),
-        },
-        { merge: true }
-      )
-      .then((res) => console.log("sucessful", res))
-      .catch((e) => console.log(e));
-  };
 
   const handleValidateError = () => {
     if (number.length < 4) {
-      Alert.alert("please use a valid phone number! ") ||
-        alert("please use a valid phone number! ");
-      return;
+      Alert.alert("please use a valid phone number! ");
+      return false;
     }
   };
   const handleSignUp = () => {
-    // if (handleValidateError()) {
-    //   return false;
-    // }
+    if (!handleValidateError()) {
+      setLoading(true);
+      auth
+        .createUserWithEmailAndPassword(email, password)
+        .then((response) => {
+          setState(true);
+          setLoading(false);
+          addUsers(response?.user);
+          addFireStoreUser(response?.user);
+          console.log("sign up screen ", response?.user);
+        })
+        .catch((err) => {
+          setError(err.message);
+          setState(true);
+          console.log(err);
+          setLoading(false);
+        });
+    } else {
+      return false;
+    }
+  };
 
-    setLoading(true);
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then((response) => {
-        setState(true);
-        setLoading(false);
-        addUser(response?.user);
+  const addFireStoreUser = (currentUser) => {
+    db.collection("users")
+      // .doc(currentUser?.uid)
+      .add({
+        email: currentUser?.email,
+        userName: "",
+        phoneNumber: "",
+        status: "online",
+        img: "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg",
+        timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+        id: currentUser?.uid,
       })
-      .catch((err) => {
-        setError(err.message);
-        setState(true);
-        console.log(err);
-        setLoading(false);
-      });
+      .then((res) => console.log("sucessful added to firestore db", res))
+      .catch((e) => console.log(e));
+  };
+
+  const addUsers = async (currentUser) => {
+    try {
+      return firebase
+        .database()
+        .ref("usersList/" + currentUser?.uid)
+        .set({
+          email: currentUser?.email,
+          userName: "",
+          phoneNumber: "",
+          status: "online",
+          img: "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg",
+          id: currentUser?.uid,
+          time: "online",
+        })
+        .then((res) => console.log("sucessful added to db", res))
+        .catch((e) => console.log(e));
+    } catch (e) {
+      return console.log(e);
+    }
   };
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "IOS" ? "padding" : "height"}
+      style={styles.container}
+    >
       <StatusBar style="auto" />
 
       {state && (
@@ -196,7 +220,7 @@ const SignUpScreen = () => {
           </Text>
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

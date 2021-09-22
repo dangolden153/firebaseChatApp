@@ -1,6 +1,8 @@
 const INITIAL_STATE = {
   usersData: null,
-  usersDetails: null,
+  CurrentUserCred: null,
+  messages: [],
+  // usersDetails: null,
 };
 
 const UserReducer = (state = INITIAL_STATE, action) => {
@@ -11,11 +13,18 @@ const UserReducer = (state = INITIAL_STATE, action) => {
         usersData: action.payload,
       };
 
-    case "userDetails":
+    case "Current_UserCred":
       return {
         ...state,
-        usersDetails: action.payload,
+        CurrentUserCred: action.payload,
       };
+
+    case "get_messages":
+      return {
+        ...state,
+        messages: action.payload,
+      };
+
     default:
       return state;
   }
