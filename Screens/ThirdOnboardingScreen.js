@@ -70,7 +70,7 @@ const ThirdOnboardingScreen = () => {
           />
         </View>
         <Button
-          onPress={() => navigation.navigate("SignInGoogleScreen")}
+          onPress={() => navigation.navigate("SignInScreen")}
           title="NEXT"
           titleStyle={{
             fontSize: 20,

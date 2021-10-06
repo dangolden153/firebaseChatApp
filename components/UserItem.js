@@ -11,8 +11,8 @@ import {
   TextInput,
 } from "react-native";
 import { useSelector } from "react-redux";
-import momemt from "moment";
-import pics from "../images/user.jpg";
+import moment from "moment";
+import { FontAwesome } from "@expo/vector-icons";
 
 const UserItem = ({ navigation, item, usersData }) => {
   const { messages } = useSelector((state) => state);
@@ -20,20 +20,9 @@ const UserItem = ({ navigation, item, usersData }) => {
   const pic =
     "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg";
 
-  // console.log("date", date);
-  const {
-    img,
-    lastMessage,
-    lastCreatedMesg,
-    name,
-    userChat,
-    status,
-    id,
-    time,
-    email,
-  } = item;
+  const { img, lastMessage, lastTime, userName, image, status, id, email } =
+    item;
 
-  // console.log("item :", item);
   return (
     <View style={{ flex: 1 }}>
       {item && (
@@ -51,7 +40,7 @@ const UserItem = ({ navigation, item, usersData }) => {
               <Image
                 source={{ uri: img ? img : pic }}
                 // source={img !== "" ? img : pics}
-                style={{ height: 80, width: 80, borderRadius: 10 }}
+                style={{ height: 70, width: 70, borderRadius: 10 }}
               />
 
               <View style={styles.chat_not_container}>
@@ -59,20 +48,27 @@ const UserItem = ({ navigation, item, usersData }) => {
                   <Text numberOfLines={1} style={styles.username}>
                     {email}
                   </Text>
-                  <Text style={styles.userchat}>
-                    {/* {lastMessage ? lastMessage : "...."} */}
+                  <Text numberOfLines={1} style={styles.lastChat}>
+                    {lastMessage === "" && image !== "" ? (
+                      <FontAwesome name="image" size={20} color="#bec0db" />
+                    ) : (
+                      lastMessage
+                    )}
                   </Text>
                 </View>
 
-                <View style={styles.date_notf}>
+                <Text style={styles.date}>
+                  {lastMessage === "" && image === ""
+                    ? ""
+                    : moment(lastTime).format("LT")}
+                </Text>
+
+                {/* this view contains last meaasge created At and number unread messages nitifications */}
+                {/* <View style={styles.date_notf}>
                   <Text style={styles.date}>
-                    {time && momemt(time).format("LT")}
+                    {moment(lastTime).format("LT")}
                   </Text>
-                  {/* <Text style={styles.notification}>2</Text> */}
-                  {/* {notifications !== "" ? (
-                  <Text style={styles.notification}>{notifications}</Text>
-                ) : null} */}
-                </View>
+                </View> */}
               </View>
             </TouchableOpacity>
           )}
@@ -93,9 +89,9 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   name_chat: {
-    width: 150,
-    // backgroundColor: "pink",
-    marginLeft: -10,
+    alignItems: "flex-start",
+
+    marginLeft: -12,
   },
 
   chat_not_container: {
@@ -104,21 +100,21 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   username: {
+    width: 150,
     color: "white",
     fontSize: 17,
-    // fontWeight: "bold",
-    marginBottom: 3,
+    marginBottom: 5,
     alignSelf: "flex-start",
-    marginLeft: 15,
-    // width: 300,
   },
-  userchat: {
-    // color: "#B9BAC7",
-    color: "white",
+  lastChat: {
+    color: "#B9BAC7",
+    fontSize: 14,
+    width: 200,
   },
   date_notf: {},
   date: {
-    color: "#005CEE",
+    fontSize: 12,
+    color: "#059669",
     marginBottom: 2,
   },
   notification: {

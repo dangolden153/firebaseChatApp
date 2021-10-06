@@ -1,8 +1,7 @@
 const INITIAL_STATE = {
   usersData: null,
   CurrentUserCred: null,
-  messages: [],
-  // usersDetails: null,
+  messages: {},
 };
 
 const UserReducer = (state = INITIAL_STATE, action) => {

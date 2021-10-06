@@ -12,21 +12,22 @@ import pics from "../images/user.jpg";
 import { AntDesign, EvilIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
-// import ImagePicker from "react-native-image-crop-picker";
 import * as ImagePicker from "expo-image-picker";
 import { firebase, db } from "../firebase";
-require("firebase/firestore");
-require("firebase/firebase-storage");
+import DeleteMessageModal from "./DeleteMessageModal";
 
 const ProfilePicture = ({ CurrentUserCred }) => {
   const { usersData, usersDetails, CurrentUserCreds } = useSelector(
     (state) => state
   );
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const navigation = useNavigation();
   const pic =
     "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg";
+
+  const handleModal = () => setOpenModal(!openModal);
 
   const openImagePickerAsync = async () => {
     let permissionResult =
@@ -38,96 +39,12 @@ const ProfilePicture = ({ CurrentUserCred }) => {
     }
 
     let pickerResult = await ImagePicker.launchImageLibraryAsync()
-      .then((res) => {
+      .then(async (res) => {
         console.log("image picker result:", res);
         setImage(res.uri);
-        // updateUserImage();
+        setOpenModal(true);
       })
       .catch((e) => console.log("uploading went wrong:", e));
-  };
-
-  //////second working method for uploading user picture to firebase storage and bd
-
-  // const imageUpload = async () => {
-  //   const response = await fetch(image);
-  //   const blob = await response.blob();
-
-  //   const task = firebase
-  //     .storage()
-  //     .ref()
-  //     .child(`images/${new Date().toString()}`)
-  //     .put(blob);
-
-  //   const taskProgress = (snapshot) => {
-  //     console.log(`transferred: ${snapshot.bytesTransferred}`);
-
-  //     const taskComplete = () => {
-  //       task.snapshot.ref
-  //         .getDownloadURL()
-  //         .then((url) => {
-  //           console.log("uploading image url:", url);
-  //         })
-  //         .catch((e) => console.log(e));
-  //     };
-
-  //     const taskError = (snapshot) => {
-  //       console.log(snapshot);
-  //     };
-
-  //     task.on("stateChanged", taskProgress, taskError, taskComplete);
-  //   };
-  // };
-
-  /////  updating profile from the firebase firestore
-
-  const updateUserImage = async () => {
-    if (image) {
-      const response = await fetch(image);
-      const blob = await response.blob();
-
-      const task = firebase
-        .storage()
-        .ref()
-        .child(`images/${new Date().toString()}`)
-        .put(blob);
-
-      task.on(
-        firebase.storage.TaskEvent.STATE_CHANGED,
-        () => {
-          setUploading(true);
-        },
-        (error) => {
-          alert("uploading", error);
-          blob.close;
-          setUploading(false);
-          return;
-        },
-        () => {
-          task.snapshot.ref
-            .getDownloadURL()
-            .then((url) => {
-              db.collection("users")
-                .doc(usersData?.uid)
-                .update({
-                  img: url,
-                })
-                .then((res) => {
-                  setImage(null);
-                  console.log("image upload sucessful", res);
-                })
-                .catch((e) => console.log(e));
-              blob.close;
-
-              setUploading(false);
-              setImage(null);
-              console.log("download url:", url);
-              return url;
-            })
-            .catch((e) => console.log(e));
-        }
-      );
-      return;
-    }
   };
 
   ////// updating profile from the firebase database
@@ -158,55 +75,67 @@ const ProfilePicture = ({ CurrentUserCred }) => {
 
   const img = CurrentUserCred?.img;
   return (
-    <View style={tw`items-center py-5  `}>
-      <View style={tw`flex-row items-center absolute top-5 left-2 `}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <AntDesign name="left" color="white" size={25} />
-        </TouchableOpacity>
-        <Text style={tw`text-xl text-white font-bold ml-3`}>Your Profile</Text>
-      </View>
-      {/*  */}
-      <View style={tw` relative mt-6 `}>
-        {uploading && (
-          <ActivityIndicator
-            style={{ position: "absolute", top: 70, left: 70, zIndex: 50 }}
-            size="small"
-            color="#0000ff"
-          />
-        )}
-
-        <Image
-          source={{
-            uri: img ? img : pic,
-          }}
-          style={{
-            height: 140,
-            width: 140,
-            // resizeMode: "contain",
-            borderRadius: 100,
-            margin: 10,
-            borderWidth: 4,
-            borderColor: "white",
-          }}
+    <>
+      {openModal && (
+        <DeleteMessageModal
+          UpdateUsersProfile={UpdateUsersProfile}
+          modal={handleModal}
+          setOpenModal={setOpenModal}
+          setImage={setImage}
         />
+      )}
+      <View style={tw`items-center py-5  `}>
+        <View style={tw`flex-row items-center absolute top-5 left-2 `}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <AntDesign name="left" color="white" size={25} />
+          </TouchableOpacity>
+          <Text style={tw`text-xl text-white font-bold ml-3`}>
+            Your Profile
+          </Text>
+        </View>
+        {/*  */}
+        <View style={tw` relative mt-6 `}>
+          {uploading && (
+            <ActivityIndicator
+              style={{ position: "absolute", top: 70, left: 70, zIndex: 50 }}
+              size="small"
+              color="#0000ff"
+            />
+          )}
 
-        <TouchableOpacity
-          onPress={openImagePickerAsync}
-          style={tw`bg-blue-600 rounded-full p-1 items-center absolute bottom-4 right-4`}
-        >
-          <EvilIcons name="pencil" color="white" size={20} />
-        </TouchableOpacity>
+          <Image
+            source={{
+              uri: image ? image : img,
+            }}
+            style={{
+              height: 140,
+              width: 140,
+              // resizeMode: "contain",
+              borderRadius: 100,
+              margin: 10,
+              borderWidth: 4,
+              borderColor: "white",
+            }}
+          />
+
+          <TouchableOpacity
+            onPress={openImagePickerAsync}
+            style={tw`bg-blue-600 rounded-full p-1 items-center absolute bottom-4 right-4`}
+          >
+            <EvilIcons name="pencil" color="white" size={20} />
+          </TouchableOpacity>
+        </View>
+        <Text style={tw`text-white text-lg`}>
+          {usersData?.displayName ? usersData?.displayName : usersData?.email}
+        </Text>
+        <Text style={tw`text-gray-200 text-sm`}>lets not wait for it</Text>
+        {/* <Button
+          style={{ marginTop: 5 }}
+          title="upload"
+          onPress={UpdateUsersProfile}
+        /> */}
       </View>
-      <Text style={tw`text-white text-lg`}>
-        {usersData?.displayName ? usersData?.displayName : usersData?.email}
-      </Text>
-      <Text style={tw`text-gray-200 text-sm`}>lets not wait for it</Text>
-      <Button
-        style={{ marginTop: 5 }}
-        title="upload"
-        onPress={UpdateUsersProfile}
-      />
-    </View>
+    </>
   );
 };
 

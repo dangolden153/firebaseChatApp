@@ -8,15 +8,15 @@ import ChatListUpNav from "../components/ChatListUpNav";
 import { useSelector } from "react-redux";
 import { db, firebase } from "../firebase";
 import { useDispatch } from "react-redux";
+import Indicator from "../components/ActivityIndicator";
 
 const ChatList = () => {
   const navigation = useNavigation();
   const { usersData } = useSelector((state) => state);
-  const [ChattedUsers, setChattedUsers] = useState([]);
   const [otherUsersData, setOtherUsersData] = useState([]);
   const dispatch = useDispatch();
-  const { CurrentUserCred } = useSelector((state) => state);
-  // console.log(new Date());
+  const { CurrentUserCred, messages } = useSelector((state) => state);
+  // console.log("otherUsersData", otherUsersData);
 
   useEffect(() => {
     try {
@@ -25,6 +25,7 @@ const ChatList = () => {
         .ref("usersList")
         .on("value", (dataSnaphot) => {
           let otherUsers = [];
+          let users = [];
           let currentUser = {
             name: "",
             id: "",
@@ -32,6 +33,11 @@ const ChatList = () => {
             email: "",
           };
 
+          let messageData = {
+            lastMessage: "",
+            lastTime: "",
+            image: "",
+          };
           dataSnaphot.forEach((snapshot) => {
             if (snapshot.val().id === usersData?.uid) {
               dispatch({ type: "Current_UserCred", payload: snapshot.val() });
@@ -48,65 +54,71 @@ const ChatList = () => {
                 status: snapshot.val().status,
                 email: snapshot.val().email,
               });
+
+              new Promise((resolve, reject) => {
+                firebase
+                  .database()
+                  .ref("messages")
+                  .child(usersData?.uid)
+                  .child(snapshot.val().id)
+                  .orderByKey()
+                  .limitToLast(1)
+                  .on("value", (dataSnapshots) => {
+                    if (dataSnapshots.val()) {
+                      dataSnapshots.forEach((child) => {
+                        // console.log("data value:", child.val());
+                        // lastMessage = child.val().messege.image !== '' ? 'Photo' : child.val().messege.msg;
+                        //// the value/data coming out from here is the message data called by the promise...and if we dont
+                        ///have any value for the user,null is been render for the user
+                        ///in another words, null is beenn appended to the user
+
+                        messageData.lastMessage = child.val().message?.messages;
+                        messageData.lastTime = child.val().message?.createdAt;
+                        messageData.image = child.val().message?.image;
+                      });
+                    } else {
+                      messageData.lastMessage = "";
+                      messageData.lastTimeTime = "";
+                    }
+
+                    //// the user data comimg from firebase database in the promise function is been
+                    /// appended to the object above the promise
+                    users.push({
+                      id: snapshot.val().id,
+                      userName: snapshot.val().userName,
+                      img: snapshot.val().img,
+                      status: snapshot.val().status,
+                      email: snapshot.val().email,
+                      lastMessage: messageData.lastMessage,
+                      lastTime: messageData.lastTime,
+                      image: messageData.image,
+                    });
+                    setOtherUsersData(
+                      users.sort((a, b) => b.lastTime - a.lastTime)
+                    );
+                  });
+              })
+                .then((res) => {
+                  console.log(res);
+                  ///and if the promise is sucessfull ....all the user and
+                  ///messages data are been pushed to the users array
+                })
+                .catch((e) => console.log(e));
             }
           });
-
-          // setCurrentUserData(currentUser);
-          setOtherUsersData(otherUsers);
         });
     } catch (e) {
       console.log(e);
     }
-  }, [usersData]);
+  }, [usersData?.uid, messages?.message?.messages]);
 
-  // useEffect(() => {
-  //   db.collection("users").onSnapshot((snap) => {
-  //     let users = [];
-  //     snap.forEach((docs) => {
-  //       users.push(docs.data());
-  //     });
-  //     setOtherUsersData(users);
-  //   });
-  // }, []);
-
-  console.log("chatted added users details:", ChattedUsers);
-  // console.log("current users details:", currentUserData);
-
-  // useEffect(() => {
-  //   db.collection("users").onSnapshot((snap) => {
-  //     let usersList = [];
-  //     snap.forEach((docs) => {
-  //       if (docs.data().id === usersData?.uid) {
-  //         dispatch({ type: "Current_UserCred", payload: docs.data() });
-  //       } else {
-  //         usersList.push(docs.data());
-  //       }
-  //     });
-  //     setOtherUsersData(usersList);
-  //   });
-  // }, [usersData]);
-
-  // useEffect(() => {
-  //   db.collection("users")
-  //     .doc(usersData?.uid)
-  //     .collection("chattedUsers")
-  //     .onSnapshot((querySnapshot) => {
-  //       let chattedUser = [];
-  //       querySnapshot.forEach((doc) => {
-  //         if (doc.data()) {
-  //           chattedUser.push(doc.data());
-  //           console.log("createChattedUsers:", doc.data());
-  //           return;
-  //         }
-  //       });
-
-  //       setChattedUsers(chattedUser);
-  //     });
-  // }, [usersData]);
+  if (!otherUsersData) {
+    return <Indicator />;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style="auto" />
 
       {/* Up nav component */}
       <ChatListUpNav
@@ -138,3 +150,7 @@ export default ChatList;
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#000000", padding: 20 },
 });
+
+///// the logic is the user details are fetched from the database and with new promise, we are able
+////to have a call back on the firebase and query for the message ref and appended all the data comimg from both user's data/value\
+///and messages value to a state and then been passed around the component.

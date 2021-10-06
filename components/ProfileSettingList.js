@@ -25,13 +25,15 @@ const ProfileSettingList = () => {
   // firebase.firestore.Timestamp.fromDate(new Date())
   // firebase.firestore.FieldValue.serverTimestamp()
   const handleSignOut = () => {
+    const timeStamp = new Date().getTime();
+    // toISOString()
     auth.signOut().then((res) => {
       updateUser();
       firebase
         .database()
         .ref("usersList/" + usersData?.uid)
         .update({
-          time: firebase.firestore.Timestamp.now(),
+          status: timeStamp,
         })
         .then((res) => {
           console.log("time update to db", res);

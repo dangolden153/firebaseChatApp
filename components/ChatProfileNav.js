@@ -13,14 +13,16 @@ import { Ionicons, FontAwesome5, AntDesign } from "@expo/vector-icons";
 import pics from "../images/user.jpg";
 import { Icon } from "react-native-elements";
 import { useSelector } from "react-redux";
-import momemt from "moment";
+import moment from "moment";
 
 const ChatProfileNav = ({ navigation, data }) => {
   const { usersData } = useSelector((state) => state);
-  const { id, img, email, status, time, userName } = data;
+  const { id, img, email, status, userName } = data;
   /////detructure the other user details and frt the neccessary information
   // 2. this data should be useeffect so it can re-render anytime the other user changed a varaible
-  // console.log("other user details:", data);
+  // console.log("momemt:", moment(status).fromDate());
+  console.log("momemt:", status);
+
   const pic =
     "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg";
 
@@ -29,14 +31,14 @@ const ChatProfileNav = ({ navigation, data }) => {
       <TouchableOpacity>
         <AntDesign
           name="arrowleft"
-          size={20}
+          size={24}
           color="white"
           onPress={() => navigation.goBack()}
         />
       </TouchableOpacity>
       <TouchableOpacity
-        style={tw`flex-row w-48 justify-between`}
-        onPress={() => navigation.navigate("ProfileScreen")}
+        style={tw`flex-row w-48 justify-between  mr-9`}
+        // onPress={() => navigation.navigate("ProfileScreen")}
       >
         <Image
           source={{ uri: img ? img : pic }}
@@ -51,7 +53,7 @@ const ChatProfileNav = ({ navigation, data }) => {
             {email}
           </Text>
           <Text style={[tw` text-sm`, { color: "#bec0db" }]}>
-            {momemt(time).format("LT")}
+            {status === "online" ? status : moment(status).format("LT")}
           </Text>
         </View>
       </TouchableOpacity>
@@ -91,13 +93,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-  },
-  input: {
-    width: 160,
-    height: 40,
-    // padding: 5,
-    paddingLeft: 15,
-    borderRadius: 15,
-    backgroundColor: "#ffff",
+    paddingVertical: 13,
   },
 });

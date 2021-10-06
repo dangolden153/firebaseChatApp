@@ -23,6 +23,7 @@ import PassCodeScreen from "./Screens/PassCodeScreen";
 import EnterPassCode from "./Screens/EnterPassCode";
 import VideoCallScreen from "./Screens/VideoCallScreen";
 import ChatList from "./Screens/ChatList";
+import OpenImage from "./Screens/OpenImage";
 import SignInScreen from "./Screens/SignInScreen";
 import { auth, db } from "./firebase";
 import { Context } from "./context";
@@ -95,32 +96,15 @@ export default function AppNavigator() {
         screenOptions={{
           gestureEnabled: true,
           gestureDirection: "horizontal",
-          transitionSpec: {
-            open: config,
-            close: config,
-          },
+          // transitionSpec: {
+          //   open: config,
+          //   close: config,
+          // },
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
       >
         {loggedin ? (
           <>
-            {/* <Stack.Screen
-            name="FirstOnboardingScreen"
-            options={{ headerShown: false }}
-            component={FirstOnboardingScreen}
-          />
-
-          <Stack.Screen
-            name="SecondOnboardingScreen"
-            options={{ headerShown: false }}
-            component={SecondOnboardingScreen}
-          />
-
-          <Stack.Screen
-            name="ThirdOnboardingScreen"
-            options={{ headerShown: false }}
-            component={ThirdOnboardingScreen}
-          /> */}
             {/* <Stack.Screen
             name="SignUpScreen"
             options={{
@@ -179,6 +163,15 @@ export default function AppNavigator() {
               }}
               component={ChatScreen}
             />
+
+            <Stack.Screen
+              name="OpenImage"
+              options={{
+                headerShown: false,
+                ...TransitionPresets.ModalSlideFromBottomIOS,
+              }}
+              component={OpenImage}
+            />
             <Stack.Screen
               name="ProfileScreen"
               options={{ headerShown: false }}
@@ -193,6 +186,24 @@ export default function AppNavigator() {
           </>
         ) : (
           <>
+            {/* <Stack.Screen
+              name="FirstOnboardingScreen"
+              options={{ headerShown: false }}
+              component={FirstOnboardingScreen}
+            />
+
+            <Stack.Screen
+              name="SecondOnboardingScreen"
+              options={{ headerShown: false }}
+              component={SecondOnboardingScreen}
+            />
+
+            <Stack.Screen
+              name="ThirdOnboardingScreen"
+              options={{ headerShown: false }}
+              component={ThirdOnboardingScreen}
+            /> */}
+
             <Stack.Screen
               name="SignInScreen"
               options={{

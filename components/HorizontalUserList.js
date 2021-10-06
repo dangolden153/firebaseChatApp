@@ -98,7 +98,7 @@ const HorizontalUserList = ({ navigation }) => {
           <ScrollView>
             <TouchableOpacity
               style={styles.usercontent}
-              onPress={() => navigation.navigate("ChatScreen")}
+              // onPress={() => navigation.navigate("ChatScreen")}
             >
               <Image
                 source={image}
@@ -106,7 +106,7 @@ const HorizontalUserList = ({ navigation }) => {
                   height: 60,
                   width: 60,
                   borderRadius: 10,
-                  borderColor: "#005CEE",
+                  borderColor: "#404040",
                   borderWidth: 3,
                 }}
               />

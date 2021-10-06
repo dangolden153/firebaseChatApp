@@ -18,7 +18,7 @@ import logo from "../images/Blord-logo.jpg";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/core";
 import { StatusBar } from "expo-status-bar";
-import { auth, db } from "../firebase";
+import { auth, firebase } from "../firebase";
 
 import FigerPrintModel from "../components/FigerPrintModel";
 
@@ -37,23 +37,27 @@ const SignInScreen = () => {
     }
   };
 
-  const updateUser = async (userData) => {
-    await db;
-    db.collection("users")
-      .doc(userData.uid)
-      .update({
-        status: "online",
-      })
-      .then((res) => console.log("sucessful", res))
-      .catch((e) => console.log(e));
+  const addUsers = async (currentUser) => {
+    try {
+      return firebase
+        .database()
+        .ref("usersList/" + currentUser?.uid)
+        .update({
+          status: "online",
+          // status: new Date().getTime(),
+        })
+        .then((res) => console.log("sucessful added to db", res))
+        .catch((e) => console.log(e));
+    } catch (e) {
+      return console.log(e);
+    }
   };
-
   const handleLogin = () => {
     setLoading(true);
     auth
       .signInWithEmailAndPassword(email, password)
       .then((response) => {
-        updateUser(response.user);
+        addUsers(response.user);
         setState(true);
         setLoading(false);
       })

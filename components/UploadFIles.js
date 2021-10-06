@@ -3,13 +3,27 @@ import { View, Text } from "react-native";
 import { TouchableOpacity, ScrollView } from "react-native-gesture-handler";
 import tw from "tailwind-react-native-classnames";
 import { AntDesign, Feather, Ionicons, FontAwesome } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
-const UploadFIles = ({ hideUploadFile }) => {
+const UploadFIles = ({ hideUploadFile, takePhoto, pickImage, setState }) => {
+  const navigation = useNavigation();
+  const handleTakePhoto = () => {
+    takePhoto();
+    setState(false);
+  };
+
+  const handlePickImage = () => {
+    pickImage();
+    setState(false);
+  };
   return (
     <View style={tw`absolute left-3 bottom-3 w-11/12 overflow-hidden`}>
       <View style={tw`bg-gray-300 rounded-lg w-full p-4`}>
         {/* Camera */}
-        <TouchableOpacity style={tw`flex-row mb-2 items-center `}>
+        <TouchableOpacity
+          onPress={handleTakePhoto}
+          style={tw`flex-row mb-2 items-center `}
+        >
           <Feather name="camera" color="#3f7fe6f3" size={25} style={tw`px-4`} />
           <Text style={tw`text-white text-lg font-bold text-black`}>
             Camera
@@ -19,7 +33,10 @@ const UploadFIles = ({ hideUploadFile }) => {
         <View style={tw`bg-gray-400 w-full h-px my-2`} />
 
         {/* photo and video  */}
-        <TouchableOpacity style={tw`flex-row mb-2 items-center `}>
+        <TouchableOpacity
+          onPress={handlePickImage}
+          style={tw`flex-row mb-2 items-center `}
+        >
           <AntDesign
             name="picture"
             color="#3f7fe6f3"

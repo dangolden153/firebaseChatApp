@@ -36,33 +36,34 @@ const SignUpScreen = () => {
     }
   };
 
-  const handleValidateError = () => {
-    if (number.length < 4) {
-      Alert.alert("please use a valid phone number! ");
-      return false;
-    }
-  };
+  // const handleValidateError = () => {
+  //   if (number.length < 4 || ) {
+  //     Alert.alert("please use a valid phone number! ");
+  //     return;
+  //   }
+  // };
   const handleSignUp = () => {
-    if (!handleValidateError()) {
-      setLoading(true);
-      auth
-        .createUserWithEmailAndPassword(email, password)
-        .then((response) => {
-          setState(true);
-          setLoading(false);
-          addUsers(response?.user);
-          addFireStoreUser(response?.user);
-          console.log("sign up screen ", response?.user);
-        })
-        .catch((err) => {
-          setError(err.message);
-          setState(true);
-          console.log(err);
-          setLoading(false);
-        });
-    } else {
-      return false;
+    if (!number || number.length < 4) {
+      alert("please use a valid phone number! ");
+      return;
     }
+
+    setLoading(true);
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((response) => {
+        setState(true);
+        setLoading(false);
+        addUsers(response?.user);
+        addFireStoreUser(response?.user);
+        console.log("sign up screen ", response?.user);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setState(true);
+        console.log(err);
+        setLoading(false);
+      });
   };
 
   const addFireStoreUser = (currentUser) => {
@@ -93,7 +94,6 @@ const SignUpScreen = () => {
           status: "online",
           img: "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg",
           id: currentUser?.uid,
-          time: "online",
         })
         .then((res) => console.log("sucessful added to db", res))
         .catch((e) => console.log(e));
