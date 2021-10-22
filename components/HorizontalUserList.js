@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   },
 
   username: {
-    color: "white",
+    color: "#203049",
     fontSize: 13,
     marginTop: 7,
     width: 60,

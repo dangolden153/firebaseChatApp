@@ -13,7 +13,7 @@ import Indicator from "../components/ActivityIndicator";
 const ChatList = () => {
   const navigation = useNavigation();
   const { usersData } = useSelector((state) => state);
-  const [otherUsersData, setOtherUsersData] = useState([]);
+  const [otherUsersData, setOtherUsersData] = useState(null);
   const dispatch = useDispatch();
   const { CurrentUserCred, messages } = useSelector((state) => state);
   // console.log("otherUsersData", otherUsersData);
@@ -112,13 +112,9 @@ const ChatList = () => {
     }
   }, [usersData?.uid, messages?.message?.messages]);
 
-  if (!otherUsersData) {
-    return <Indicator />;
-  }
-
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
 
       {/* Up nav component */}
       <ChatListUpNav
@@ -131,13 +127,14 @@ const ChatList = () => {
 
       {/* List of users */}
       <View style={{ flex: 1 }}>
-        <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
+        <Text style={{ color: "#203049", fontSize: 20, fontWeight: "bold" }}>
           Recent Chats
         </Text>
-        <UserList
-          navigation={navigation}
-          otherUsersData={otherUsersData && otherUsersData}
-        />
+        {otherUsersData !== null ? (
+          <UserList navigation={navigation} otherUsersData={otherUsersData} />
+        ) : (
+          <Indicator />
+        )}
       </View>
 
       {/* button tab */}
@@ -148,7 +145,7 @@ const ChatList = () => {
 export default ChatList;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#000000", padding: 20 },
+  container: { flex: 1, backgroundColor: "#DEEAF6", padding: 20 },
 });
 
 ///// the logic is the user details are fetched from the database and with new promise, we are able

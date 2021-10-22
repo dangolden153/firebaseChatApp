@@ -106,7 +106,7 @@ const SignUpScreen = () => {
       behavior={Platform.OS === "IOS" ? "padding" : "height"}
       style={styles.container}
     >
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
 
       {state && (
         <View
@@ -141,17 +141,9 @@ const SignUpScreen = () => {
           </Text>
         </View>
       )}
-      <Image
-        source={logo}
-        style={{
-          width: 250,
-          height: 250,
-          resizeMode: "contain",
-          marginBottom: 20,
-        }}
-      />
+      <Text style={tw`text-gray-300 text-2xl `}> Create Account</Text>
 
-      <View style={tw`-top-16 w-full items-center`}>
+      <View style={tw`mt-12 w-full items-center`}>
         {/* google */}
         <View
           style={tw`bg-white  p-2 mt-3 border rounded-lg w-full overflow-hidden`}
@@ -165,7 +157,7 @@ const SignUpScreen = () => {
           />
         </View>
 
-        {/* phone  number*/}
+        {/* Enter your Phone number*/}
         <View
           style={tw`bg-white  p-2 mt-3 border rounded-lg w-full overflow-hidden`}
         >
@@ -231,8 +223,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#000000",
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 40,
     alignItems: "center",
+    justifyContent: "center",
     overflow: "hidden",
   },
   input: {

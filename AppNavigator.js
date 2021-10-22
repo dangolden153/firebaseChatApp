@@ -186,7 +186,7 @@ export default function AppNavigator() {
           </>
         ) : (
           <>
-            {/* <Stack.Screen
+            <Stack.Screen
               name="FirstOnboardingScreen"
               options={{ headerShown: false }}
               component={FirstOnboardingScreen}
@@ -202,7 +202,7 @@ export default function AppNavigator() {
               name="ThirdOnboardingScreen"
               options={{ headerShown: false }}
               component={ThirdOnboardingScreen}
-            /> */}
+            />
 
             <Stack.Screen
               name="SignInScreen"

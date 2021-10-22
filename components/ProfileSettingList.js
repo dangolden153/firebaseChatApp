@@ -46,7 +46,7 @@ const ProfileSettingList = () => {
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={tw`bg-gray-800 rounded-lg p-4`}>
         {/* account */}
-        <TouchableOpacity style={tw`flex-row mb-2  `} onPress={handleSignOut}>
+        <TouchableOpacity style={tw`flex-row mb-2  `}>
           <Feather
             name="key"
             color="black"
@@ -124,20 +124,20 @@ const ProfileSettingList = () => {
         </TouchableOpacity>
       </View>
 
-      {/* invite friends */}
+      {/* logout */}
       <View style={tw`bg-gray-800 rounded-lg p-3 mt-2`}>
-        <TouchableOpacity style={tw`flex-row `}>
-          <Feather
-            name="users"
+        <TouchableOpacity
+          style={tw`flex-row items-center`}
+          onPress={handleSignOut}
+        >
+          <AntDesign
+            name="logout"
             color="black"
             size={25}
             style={tw`items-center bg-white p-3 rounded-lg`}
           />
           <View style={tw`ml-6`}>
-            <Text style={tw`text-white text-lg `}>Invite Friends </Text>
-            <Text style={tw`text-gray-300 text-sm`}>
-              Invite new friends and earn
-            </Text>
+            <Text style={tw`text-white text-lg `}>Logout</Text>
           </View>
         </TouchableOpacity>
       </View>

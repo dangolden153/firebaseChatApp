@@ -14,15 +14,11 @@ import pics from "../images/user.jpg";
 import { StatusBar } from "expo-status-bar";
 import tw from "tailwind-react-native-classnames";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useSelector } from "react-redux";
-import momemt from "moment";
 
 const ChatListUpNav = ({ navigation, CurrentUserCred }) => {
   // const { img, id, status, email } = CurrentUserCred;
   const img = CurrentUserCred?.img;
-  // const time = CurrentUserCred?.time;
-  // const Time = momemt(time).format("LT");
-  // console.log("time", typeof(Time));
+
   const pic =
     "https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg";
 
@@ -30,8 +26,15 @@ const ChatListUpNav = ({ navigation, CurrentUserCred }) => {
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
       <Image
-        source={logo}
-        style={{ height: 90, width: 90, resizeMode: "contain" }}
+        source={{
+          uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTtr6waVawYYOP7MPCrTiXWK0uhgGko5axNw&usqp=CAU",
+        }}
+        style={{
+          height: 60,
+          width: 60,
+          resizeMode: "contain",
+          borderRadius: 100,
+        }}
       />
 
       <View style={tw`w-28  flex-row items-center justify-between`}>
@@ -39,7 +42,7 @@ const ChatListUpNav = ({ navigation, CurrentUserCred }) => {
           <Ionicons
             name="notifications-outline"
             size={25}
-            color="white"
+            color="#6A6A6A"
             style={{ marginLeft: 20 }}
           />
         </TouchableOpacity>

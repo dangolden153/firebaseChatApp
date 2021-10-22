@@ -32,7 +32,7 @@ const Message = ({ item, usersData }) => {
             >
               <Image
                 source={{ uri: item?.image }}
-                style={{ height: 400, width: 300, resizeMode: "cover" }}
+                style={{ height: 300, width: 250, resizeMode: "cover" }}
               />
             </Pressable>
           ) : null}
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#005CEE",
     padding: 10,
     borderRadius: 10,
-    width: 320,
+    width: 270,
     justifyContent: "center",
     alignItems: "center",
   },

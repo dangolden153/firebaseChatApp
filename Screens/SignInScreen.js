@@ -11,10 +11,7 @@ import {
 } from "react-native";
 import { Button, Icon } from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
-import pics from "../images/google.png";
-import facebook from "../images/facebook.png";
-import mail from "../images/Gmail-Logo.png";
-import logo from "../images/Blord-logo.jpg";
+
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/core";
 import { StatusBar } from "expo-status-bar";
@@ -69,7 +66,7 @@ const SignInScreen = () => {
       });
   };
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}>
       <StatusBar style="light" />
 
       {state && (
@@ -106,16 +103,9 @@ const SignInScreen = () => {
           </Text>
         </View>
       )}
-      <Image
-        source={logo}
-        style={{
-          width: 250,
-          height: 250,
-          resizeMode: "contain",
-        }}
-      />
+      <Text style={tw`text-gray-300 text-2xl `}> Login in</Text>
 
-      <View style={tw` w-full items-center`}>
+      <View style={tw`mt-12 w-full items-center`}>
         {/* Gmail */}
         <View
           style={tw`bg-white  p-2 mt-3 border rounded-lg w-full overflow-hidden`}
@@ -172,7 +162,7 @@ const SignInScreen = () => {
       </View>
 
       {/* <FigerPrintModel navigation={navigation} /> */}
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -186,6 +176,7 @@ const styles = StyleSheet.create({
 
     paddingHorizontal: 20,
     alignItems: "center",
+    justifyContent: "center",
     overflow: "hidden",
     zIndex: -1,
     paddingTop: 30,

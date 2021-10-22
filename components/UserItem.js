@@ -101,13 +101,13 @@ const styles = StyleSheet.create({
   },
   username: {
     width: 150,
-    color: "white",
+    color: "#203049",
     fontSize: 17,
     marginBottom: 5,
     alignSelf: "flex-start",
   },
   lastChat: {
-    color: "#B9BAC7",
+    color: "#6A6A6A",
     fontSize: 14,
     width: 200,
   },
